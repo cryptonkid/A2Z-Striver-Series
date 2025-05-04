@@ -1,0 +1,469 @@
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Pattern</th>
+        <th>Category</th>
+        <th>Pros</th>
+        <th>Cons</th>
+        <th>Sample Code</th>
+        <th>Practical Usage</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <!-- Factory Method -->
+      <tr>
+        <td><strong>Factory Method</strong></td>
+        <td>Creational</td>
+        <td>
+          <ul>
+            <li>Loose coupling</li>
+            <li>Single Responsibility Principle</li>
+            <li>Open/Closed Principle</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Can introduce many small classes</li>
+            <li>Increases complexity</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface Payment {
+      void process();
+  }
+  
+  class CreditCard implements Payment {
+      public void process() {
+          System.out.println("Credit card payment");
+      }
+  }
+  
+  class PaymentFactory {
+      public Payment createPayment(String type) {
+          if ("credit".equals(type)) {
+              return new CreditCard();
+          }
+          throw new IllegalArgumentException("Unknown type");
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Payment processing systems</li>
+            <li>UI framework components</li>
+            <li>Database connector creation</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Abstract Factory -->
+      <tr>
+        <td><strong>Abstract Factory</strong></td>
+        <td>Creational</td>
+        <td>
+          <ul>
+            <li>Creates families of related objects</li>
+            <li>Ensures compatibility</li>
+            <li>Easy to swap implementations</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Complex to implement</li>
+            <li>Hard to add new product types</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface GUIFactory {
+      Button createButton();
+      Checkbox createCheckbox();
+  }
+  
+  class WinFactory implements GUIFactory {
+      public Button createButton() {
+          return new WinButton();
+      }
+      public Checkbox createCheckbox() {
+          return new WinCheckbox();
+      }
+  }
+  
+  // Client code
+  GUIFactory factory = new WinFactory();
+  Button btn = factory.createButton();</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Cross-platform UI toolkits</li>
+            <li>Database abstraction layers</li>
+            <li>Theming systems</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Builder -->
+      <tr>
+        <td><strong>Builder</strong></td>
+        <td>Creational</td>
+        <td>
+          <ul>
+            <li>Flexible object construction</li>
+            <li>Immutable objects</li>
+            <li>Clear construction process</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Verbose implementation</li>
+            <li>Overkill for simple objects</li>
+          </ul>
+        </td>
+        <td>
+          <pre>class Pizza {
+      private String dough, sauce, topping;
+      
+      private Pizza(Builder builder) {
+          this.dough = builder.dough;
+          this.sauce = builder.sauce;
+          this.topping = builder.topping;
+      }
+      
+      public static class Builder {
+          private String dough, sauce, topping;
+          
+          public Builder dough(String dough) {
+              this.dough = dough;
+              return this;
+          }
+          
+          public Pizza build() {
+              return new Pizza(this);
+          }
+      }
+  }
+  
+  // Usage:
+  Pizza pizza = new Pizza.Builder()
+      .dough("thin").sauce("tomato").build();</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Complex configuration objects</li>
+            <li>Immutable objects</li>
+            <li>HTTP request builders</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Adapter -->
+      <tr>
+        <td><strong>Adapter</strong></td>
+        <td>Structural</td>
+        <td>
+          <ul>
+            <li>Integrates incompatible interfaces</li>
+            <li>Reuses existing functionality</li>
+            <li>Single Responsibility Principle</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Adds complexity</li>
+            <li>Can be overused</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface ModernPrinter {
+      void print(String text);
+  }
+  
+  class LegacyPrinter {
+      void printDocument(String text) {
+          System.out.println("Legacy: " + text);
+      }
+  }
+  
+  class PrinterAdapter implements ModernPrinter {
+      private LegacyPrinter legacyPrinter;
+      
+      public PrinterAdapter(LegacyPrinter printer) {
+          this.legacyPrinter = printer;
+      }
+      
+      public void print(String text) {
+          legacyPrinter.printDocument(text);
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Legacy system integration</li>
+            <li>Third-party library wrappers</li>
+            <li>API version compatibility</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Decorator -->
+      <tr>
+        <td><strong>Decorator</strong></td>
+        <td>Structural</td>
+        <td>
+          <ul>
+            <li>Dynamic behavior extension</li>
+            <li>Alternative to subclassing</li>
+            <li>Open/Closed Principle</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Many small classes</li>
+            <li>Complex instantiation</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface Coffee {
+      double getCost();
+      String getDescription();
+  }
+  
+  class SimpleCoffee implements Coffee {
+      public double getCost() { return 2; }
+      public String getDescription() { return "Coffee"; }
+  }
+  
+  class MilkDecorator implements Coffee {
+      private Coffee coffee;
+      
+      public MilkDecorator(Coffee coffee) {
+          this.coffee = coffee;
+      }
+      
+      public double getCost() {
+          return coffee.getCost() + 0.5;
+      }
+      
+      public String getDescription() {
+          return coffee.getDescription() + ", Milk";
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Stream processing</li>
+            <li>Middleware components</li>
+            <li>UI component decoration</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Observer -->
+      <tr>
+        <td><strong>Observer</strong></td>
+        <td>Behavioral</td>
+        <td>
+          <ul>
+            <li>Loose coupling</li>
+            <li>Dynamic relationships</li>
+            <li>Broadcast communication</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Memory leaks (if not unregistered)</li>
+            <li>Unexpected updates</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface Observer {
+      void update(String message);
+  }
+  
+  class ConcreteObserver implements Observer {
+      public void update(String message) {
+          System.out.println("Received: " + message);
+      }
+  }
+  
+  class Subject {
+      private List<Observer> observers = new ArrayList<>();
+      
+      public void addObserver(Observer o) {
+          observers.add(o);
+      }
+      
+      public void notifyObservers(String message) {
+          for (Observer o : observers) {
+              o.update(message);
+          }
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Event handling systems</li>
+            <li>Model-View-Controller (MVC)</li>
+            <li>Stock market monitoring</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Strategy -->
+      <tr>
+        <td><strong>Strategy</strong></td>
+        <td>Behavioral</td>
+        <td>
+          <ul>
+            <li>Flexible algorithm selection</li>
+            <li>Eliminates conditional statements</li>
+            <li>Open/Closed Principle</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Client must know strategies</li>
+            <li>Increased number of objects</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface CompressionStrategy {
+      void compress(String file);
+  }
+  
+  class ZipCompression implements CompressionStrategy {
+      public void compress(String file) {
+          System.out.println("ZIP: " + file);
+      }
+  }
+  
+  class CompressionContext {
+      private CompressionStrategy strategy;
+      
+      public void setStrategy(CompressionStrategy s) {
+          this.strategy = s;
+      }
+      
+      public void compressFile(String file) {
+          strategy.compress(file);
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Payment processing (different gateways)</li>
+            <li>Sorting algorithms</li>
+            <li>Navigation systems (different routes)</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Command -->
+      <tr>
+        <td><strong>Command</strong></td>
+        <td>Behavioral</td>
+        <td>
+          <ul>
+            <li>Decouples invoker and receiver</li>
+            <li>Undo/redo functionality</li>
+            <li>Queue or log requests</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Many command classes</li>
+            <li>Increased complexity</li>
+          </ul>
+        </td>
+        <td>
+          <pre>interface Command {
+      void execute();
+  }
+  
+  class LightOnCommand implements Command {
+      private Light light;
+      
+      public LightOnCommand(Light light) {
+          this.light = light;
+      }
+      
+      public void execute() {
+          light.turnOn();
+      }
+  }
+  
+  class RemoteControl {
+      private Command command;
+      
+      public void setCommand(Command c) {
+          this.command = c;
+      }
+      
+      public void pressButton() {
+          command.execute();
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>GUI buttons/menu items</li>
+            <li>Macro recording</li>
+            <li>Transactional systems</li>
+          </ul>
+        </td>
+      </tr>
+      
+      <!-- Template Method -->
+      <tr>
+        <td><strong>Template Method</strong></td>
+        <td>Behavioral</td>
+        <td>
+          <ul>
+            <li>Code reuse</li>
+            <li>Inversion of Control</li>
+            <li>Flexible specialization</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Limited by inheritance</li>
+            <li>Can be confusing</li>
+          </ul>
+        </td>
+        <td>
+          <pre>abstract class Game {
+      abstract void initialize();
+      abstract void startPlay();
+      
+      // Template method
+      public final void play() {
+          initialize();
+          startPlay();
+          endPlay();
+      }
+      
+      void endPlay() {
+          System.out.println("Game over");
+      }
+  }
+  
+  class Chess extends Game {
+      void initialize() {
+          System.out.println("Chess init");
+      }
+      void startPlay() {
+          System.out.println("Chess started");
+      }
+  }</pre>
+        </td>
+        <td>
+          <ul>
+            <li>Framework hooks</li>
+            <li>Algorithm skeletons</li>
+            <li>Standardized processes</li>
+          </ul>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>

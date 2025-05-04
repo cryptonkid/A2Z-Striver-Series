@@ -1,0 +1,198 @@
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Pros</th>
+        <th>Cons</th>
+        <th>Sample Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Eager Initialization -->
+      <tr>
+        <td><strong>Eager Initialization</strong></td>
+        <td>
+          <ul>
+            <li>Simple to implement</li>
+            <li>Thread-safe by default</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Instance created even if never used</li>
+            <li>No exception handling</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public class EagerSingleton {
+      private static final EagerSingleton 
+          instance = new EagerSingleton();
+      
+      private EagerSingleton() {}
+      
+      public static EagerSingleton getInstance() {
+          return instance;
+      }
+  }</pre>
+        </td>
+      </tr>
+      
+      <!-- Lazy Initialization -->
+      <tr>
+        <td><strong>Lazy Initialization</strong></td>
+        <td>
+          <ul>
+            <li>Instance created only when needed</li>
+            <li>Saves resources</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Not thread-safe</li>
+            <li>Requires synchronization for multithreading</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public class LazySingleton {
+      private static LazySingleton instance;
+      
+      private LazySingleton() {}
+      
+      public static LazySingleton getInstance() {
+          if (instance == null) {
+              instance = new LazySingleton();
+          }
+          return instance;
+      }
+  }</pre>
+        </td>
+      </tr>
+      
+      <!-- Thread-Safe (Synchronized Method) -->
+      <tr>
+        <td><strong>Thread-Safe (Synchronized Method)</strong></td>
+        <td>
+          <ul>
+            <li>Simple thread safety</li>
+            <li>Lazy initialization</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Performance overhead</li>
+            <li>Synchronization only needed for first creation</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public class ThreadSafeSingleton {
+      private static ThreadSafeSingleton instance;
+      
+      private ThreadSafeSingleton() {}
+      
+      public static synchronized 
+          ThreadSafeSingleton getInstance() {
+          if (instance == null) {
+              instance = new ThreadSafeSingleton();
+          }
+          return instance;
+      }
+  }</pre>
+        </td>
+      </tr>
+      
+      <!-- Double-Checked Locking -->
+      <tr>
+        <td><strong>Double-Checked Locking</strong></td>
+        <td>
+          <ul>
+            <li>Thread-safe</li>
+            <li>Reduces synchronization overhead</li>
+            <li>Lazy initialization</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Complex implementation</li>
+            <li>Prior to Java 5, could be broken</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public class DCLSingleton {
+      private static volatile DCLSingleton instance;
+      
+      private DCLSingleton() {}
+      
+      public static DCLSingleton getInstance() {
+          if (instance == null) {
+              synchronized (DCLSingleton.class) {
+                  if (instance == null) {
+                      instance = new DCLSingleton();
+                  }
+              }
+          }
+          return instance;
+      }
+  }</pre>
+        </td>
+      </tr>
+      
+      <!-- Bill Pugh (Static Holder) -->
+      <tr>
+        <td><strong>Bill Pugh (Static Holder)</strong></td>
+        <td>
+          <ul>
+            <li>Thread-safe</li>
+            <li>Lazy initialization</li>
+            <li>No synchronization needed</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Slightly more complex</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public class BillPughSingleton {
+      private BillPughSingleton() {}
+      
+      private static class SingletonHolder {
+          private static final BillPughSingleton
+              INSTANCE = new BillPughSingleton();
+      }
+      
+      public static BillPughSingleton getInstance() {
+          return SingletonHolder.INSTANCE;
+      }
+  }</pre>
+        </td>
+      </tr>
+      
+      <!-- Enum Singleton -->
+      <tr>
+        <td><strong>Enum Singleton</strong></td>
+        <td>
+          <ul>
+            <li>Simplest and safest implementation</li>
+            <li>Thread-safe</li>
+            <li>Serialization handled automatically</li>
+            <li>Reflection attack safe</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>Not lazy initialization</li>
+            <li>Less flexible (no inheritance)</li>
+          </ul>
+        </td>
+        <td>
+          <pre>public enum EnumSingleton {
+      INSTANCE;
+      
+      public void doSomething() {
+          // method implementation
+      }
+  }</pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>

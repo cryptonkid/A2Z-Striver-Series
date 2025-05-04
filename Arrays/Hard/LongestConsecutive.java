@@ -10,7 +10,6 @@ class LongestConsecutive {
      */
     public int longestConsecutive(int[] nums) {
         if (nums.length == 0) return 0;
-
         Set<Integer> numSet = new HashSet<>();
         for (int num : nums) {
             numSet.add(num);
